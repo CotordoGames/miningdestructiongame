@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -12,6 +13,7 @@ public class playermovement : MonoBehaviour
     //less drag in air = more realistic gameplay
     public float aspeed;
     public float aaccel;
+    private float rotmultiplier = 1;
     [Header("Jumping")]
     public float jumpforce;
     public float jumpcut;
@@ -21,6 +23,7 @@ public class playermovement : MonoBehaviour
     private Rigidbody2D rb;
     private CircleCollider2D cc;
     public BoxCollider2D feet;
+    private SpriteRenderer sr;
     [Header("Controls")]
     public InputAction Horizontal;
     public InputAction IJump;
@@ -38,16 +41,11 @@ public class playermovement : MonoBehaviour
     }
 
 
-
-
-
-
-
-
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         cc = GetComponent<CircleCollider2D>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
     //velocityvars
@@ -59,8 +57,21 @@ public class playermovement : MonoBehaviour
 
         Walk();
         Jump();
+        Flip();
 
         rb.linearVelocity = new Vector2(velX, rb.linearVelocityY);
+    }
+
+    void Flip()
+    {
+        if(rb.linearVelocityX < -1)
+        {
+            sr.flipX = true;
+        }
+        else if(rb.linearVelocityX > 1)
+        {
+            sr.flipX = false;
+        }
     }
 
     void Walk()
