@@ -77,9 +77,18 @@ public class playermovement : MonoBehaviour
 
     void Jump()
     {
-        if(IJump.IsPressed() && isGrounded())
+        if(isGrounded())//default gravoty is 3
+        {
+            rb.gravityScale = 3;
+        }
+        if(IJump.IsPressed() && isGrounded())//just applies the default jump force
         {
             rb.linearVelocity = new Vector2(velX, jumpforce);
+        }
+        else if(!isGrounded() && !IJump.IsPressed() && rb.linearVelocityY > 0f)//cuts the jump and speeds up falling
+        {
+            rb.linearVelocity = new Vector2(velX, rb.linearVelocityY / jumpcut);
+            rb.gravityScale = fallspeed;
         }
     }
 
